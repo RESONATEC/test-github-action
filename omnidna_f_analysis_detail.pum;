@@ -1,0 +1,73 @@
+@startuml omnidna_f_analysis_detail
+title OmniDNA Frontend Analysis Detail
+
+start
+:Go to analysis detail page;
+:Auth|
+if (Redirect) then (Yes)
+    stop
+else (No)
+endif
+:Get analysis detail|
+:Select the newest submit;
+if (Submit is finished?) then (Yes)
+    :Get submit detail|
+else (No)
+endif
+repeat
+    split
+        :Go to analysis page;
+        stop
+    split again
+        :Select submit;
+        :Submit ID/
+        if (Submit is finished?) then (Yes)
+            :Get submit detail|
+        else (No)
+        endif
+    split again
+        :Terminate;
+        :Comment/
+        split
+            :Close;
+        split again
+            :Terminate|
+        end split
+    split again
+        :Reopen;
+        fork
+            :Comment/
+        fork again
+            :Note/
+        end fork
+        split
+            :Close;
+        split again
+            :Reopen|
+        end split
+    split again
+        :Modify;
+        split
+            :Close;
+        split again
+            :Go to create alalysis page;
+            stop
+        end split
+    split again
+        :Reanalyze;
+        fork
+            :Comment/
+        fork again
+            :Note/
+        end fork
+        split
+            :Close;
+        split again
+            :Reanalyze|
+        end split
+    split again
+        :Download report|
+    end split
+repeat while ()
+
+@enduml
