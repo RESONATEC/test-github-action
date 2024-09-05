@@ -1,0 +1,47 @@
+@startuml "central-lab-actg-dragen-automation"
+skinparam defaultTextAlignment center
+|actg-dragen-automation container|
+start
+while (Detect $RUN_ID.csv (samples.csv)) is (Not detected)
+    :recheck;
+endwhile (Detected)
+:create required directory structure;
+note
+    mkdir -p "/staging/${RUN_ID}/fastq"
+    mkdir -p "/staging/${RUN_ID}/analysis"
+end note
+:Copy $RUN_ID.csv (samples.csv) to\n /staging/${RUN_ID};
+:Run convert_samples_csv.sh\nGenerate SampleSheet.fastq.csv;
+:Run fix_sample_sheet.sh\nGenerate SampleSheet.analysis.csv;
+while (Detect CopyComplete.txt\nin /mnt/Seqdata/Output/$RUN_ID) is (Not detected)
+    :recheck;
+endwhile (Detected)
+:Create /staging/${RUN_ID}.ReadyToGo.txt;
+split
+while (Detect /staging/${RUN_ID}.Done.txt) is (Not detected)
+    :recheck;
+endwhile (Detected)
+:Copy results to \n/mnt/vol_tso500ctdna_data/DRAGEN_OUT;
+stop
+|dragen-server|
+split again
+while (Detect /staging/${RUN_ID}.ReadyToGo.txt) is (Not detected)
+    :recheck;
+endwhile (Detected)
+:Run process.sh;
+note
+    run_bcl_conversion ${RUN_ID}
+    prepare_fastq_folder ${RUN_ID}
+    run_dragen ${RUN_ID}
+end note
+:Generate results & /staging/${RUN_ID}.Done.txt;
+stop
+|Omnidna_integration|
+split again
+while (Detect /staging/${RUN_ID}.Done.txt) is (Not detected)
+    :recheck;
+endwhile (Detected)
+:Import results to Omnidna;
+end
+end split
+@enduml
