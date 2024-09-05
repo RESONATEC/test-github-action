@@ -1,9 +1,15 @@
 name: generate plantuml
 
-on: 
-  push:
+on:
+  pull_request:
     branches: 
       - develop
+      - release/*
+      - hotfix/*
+    types:
+      - opened
+      - edited
+      - synchronize
 
 jobs:
   generate_plantuml:
