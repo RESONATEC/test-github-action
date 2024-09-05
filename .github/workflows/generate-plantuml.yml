@@ -16,7 +16,7 @@ jobs:
           fetch-depth: 1
       - name: plantuml
         id: plantuml
-        uses: grassedge/generate-plantuml-action@ae213c00d5c2c2de1fd8642055bcf571fea2f72e
+        uses: b97390022/generate-plantuml-action@master
         with:
           path: .
           message: "Render PlantUML files."
