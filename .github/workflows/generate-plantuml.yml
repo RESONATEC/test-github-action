@@ -20,6 +20,8 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 1
+      - name: Print PR branch name
+        run: echo "PR branch is ${{ github.head_ref }}"
       - name: plantuml
         id: plantuml
         uses: b97390022/generate-plantuml-action@master
