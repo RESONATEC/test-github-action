@@ -1,18 +1,14 @@
 name: generate plantuml
 
 on:
-  pull_request:
-    branches: 
-      - develop
-      - release/*
-      - hotfix/*
+  workflow_run:
+    workflows: ["Lint PR"]
     types:
-      - opened
-      - edited
-      - synchronize
+      - completed
 
 jobs:
   generate_plantuml:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     name: plantuml
     steps:
