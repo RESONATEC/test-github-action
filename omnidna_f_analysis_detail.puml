@@ -1,6 +1,7 @@
 @startuml omnidna_f_analysis_detail
 title OmniDNA Frontend Analysis Detail
 
+
 start
 :Go to analysis detail page;
 :Auth|
